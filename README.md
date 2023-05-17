@@ -1,19 +1,19 @@
 # independence_ranktest
 
 Code used for the numerical experiments of the companion working paper, Section Numerical Experiments:
-   "On Ranking-based Tests of Independence" M. Limnios, S. Clémençon.
+   "On Ranking-based Tests of Independence".
    
 # Information
 
 Use the main.py script to run for the Independence test.
 
-The functions coded in stattest_fct and fct_distribW are needed for the execution.
+The functions coded in stattest_fct and utils are needed for the execution.
 
 Code the probabilistic models in datagenerator for generating the two samples.
 
 The variables are denoted as in the main paper Section Numerical Experiments.
 
-author: Myrto Limnios, mail: myli@math.ku.dk
+author:
 
 
 # What it does:
