@@ -82,12 +82,6 @@ def sq_distances(X,Y=None):
     #    X = X[:, np.newaxis]
     if Y is None:
         sq_dists = squareform(pdist(X, 'sqeuclidean'))
-
-    #elif (Y!=None && Y.ndim == 2):
-    #    Y = Y[:, np.newaxis]
-    # IMPLEMENT: compute pairwise distance matrix. Don't use explicit loops, but the above scipy functions
-    # if X=Y, use more efficient pdist call which exploits symmetry
-
     else:
         assert(Y.ndim==2)
         assert(X.shape[1]==Y.shape[1])
@@ -96,63 +90,31 @@ def sq_distances(X,Y=None):
     return sq_dists
 
 def median_bandwidth(Z):
-
-    #if Z.ndim != 2:
-    #Z = Z[:, np.newaxis]
-    # IMPLEMENT: compute the median of the pairwise distances in Z
-    # (not taking zero distance between identical samples (diagonal) into account)
     sq_dists = sq_distances(Z)
     np.fill_diagonal(sq_dists, np.nan)
     sq_dists = np.ravel(sq_dists)
     sq_dists = sq_dists[~np.isnan(sq_dists)]
     median_dist = np.median(np.sqrt(sq_dists))
 
-    return np.sqrt(median_dist / 2.0)  # our kernel uses a bandwidth of 2*(sigma**2)
+    return np.sqrt(median_dist / 2.0)  
 
 
 def gauss_kernel(X, Y=None, sigma=1.0):
-    """
-    Computes the standard Gaussian kernel k(x,y)=exp(- ||x-y||**2 / (2 * sigma**2))
-
-    X - 2d array, samples on left hand side
-    Y - 2d array, samples on right hand side, can be None in which case they are replaced by X
-
-    returns: kernel matrix
-    """
-
-    # IMPLEMENT: compute squared distances and kernel matrix
     sq_dists = sq_distances(X, Y)
     K = np.exp(-sq_dists / (2 * sigma ** 2))
     return K
 
-
-# IMPLEMENT
-def linear_kernel(X, Y):
-    return np.dot(X, Y.T)
-
 def HSIC_stat(X, Y):
-    #med = median_bandwidth(np.vstack((X, Y)))
     medX = median_bandwidth(X)#[:, np.newaxis])
     medY = median_bandwidth(Y)#[:, np.newaxis])
-    #print(medX, medY)#,  median_bandwidth(np.vstack((X[:, np.newaxis], Y[:, np.newaxis]))))
-    #sigma_median = median_bandwidth(np.vstack((X[:, np.newaxis], Y[:, np.newaxis])))
-    kernel = lambda X, Y, band: np.exp(- sq_distances(X,Y)/ (2 * band ** 2))#[:, np.newaxis], Y[:, np.newaxis]) / (2 * band ** 2))
+    kernel = lambda X, Y, band: np.exp(- sq_distances(X,Y)/ (2 * band ** 2))
     K_XX = kernel(X, X, medX)
     K_YY = kernel(Y, Y, medY)
 
     assert len(K_XX) == len(K_YY)
     N = len(K_XX)
-    """if permute:
-        # IMPLEMENT: permute the kernel matrices for X and Y
-        inds_X = np.random.permutation(len(K_XX))
-        inds_Y = np.random.permutation(len(K_YY))
-        K_XX_ = K_XX[inds_X, :][:, inds_X]
-        K_YY_ = K_YY[inds_Y, :][:, inds_Y]"""
-    #else:
     K_XX_ = K_XX
     K_YY_ = K_YY
-
-    # IMPLEMENT: HSIC statistic
     H = np.eye(N) - 1.0 / N
     statistic = np.trace(K_XX_.dot(H).dot(K_YY_.dot(H))) / (N ** 2)
 
@@ -160,11 +122,6 @@ def HSIC_stat(X, Y):
 
 
 def cov_center(X,Y):
-    #if Y is None:
-    #    akl = cdist(X, X, 'sqeuclidean')
-    #else :
-    #    assert X.ndim == Y.ndim
-
     akl = cdist(X, Y, 'sqeuclidean')
 
     ak = np.asarray([np.sum(akl[i])/ len(X)  for i in range(len(akl))] ) # sum per line
