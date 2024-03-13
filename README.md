@@ -18,7 +18,7 @@ The variables are denoted as in the main paper Section Numerical Experiments.
  2. Performs a Random Forest bipartite ranking algorithm in the first halves to learning the optimal model (Step 2 of the proposed method)
  3. Uses the outputs of 2. to score the second halves to the real line (Step 3 of the proposed method)
  4. Performs the hypothesis test on the obtained univariate two samples (Step 3 of the proposed method)
- 5. Compares the results to SoA algorithms: Hilbert-Schmidt Indeependence Criterion [Gretton et al. 2007](https://papers.nips.cc/paper_files/paper/2007/hash/d5cfead94f5350c12c322b5b664544c1-Abstract.html) with Gaussian kernel of bandwidth the median heuristic choice,
+ 5. Compares the results to SoA algorithms: Hilbert-Schmidt Independence Criterion [Gretton et al. 2007](https://papers.nips.cc/paper_files/paper/2007/hash/d5cfead94f5350c12c322b5b664544c1-Abstract.html) with Gaussian kernel of bandwidth the median heuristic choice,
                Energy statistic with L1 and L2 norms [Szekely et al. 2007](https://projecteuclid.org/journals/annals-of-statistics/volume-35/issue-6/Measuring-and-testing-dependence-by-correlation-of-distances/10.1214/009053607000000505.full) coded in stattest_fct
  6. Outputs the numerical pvalue for each sampling loop
 
